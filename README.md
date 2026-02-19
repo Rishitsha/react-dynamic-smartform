@@ -1,5 +1,11 @@
 # 🚀 react-dynamic-smartform
 
+![npm version](https://img.shields.io/npm/v/react-dynamic-smartform?color=brightgreen)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-dynamic-smartform)
+![npm downloads](https://img.shields.io/npm/dm/react-dynamic-smartform?color=blue)
+![license](https://img.shields.io/npm/l/react-dynamic-smartform)
+![github stars](https://img.shields.io/github/stars/Rishitsha/react-dynamic-smartform?style=social)
+
 A lightweight, schema-driven dynamic form builder for React.  
 Build complex, validated forms in seconds using just a JSON schema ✨
 
