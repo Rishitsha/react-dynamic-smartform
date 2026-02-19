@@ -19,7 +19,6 @@ const RadioField = ({
   options: rawOptions = [],
 }: RadioFieldProps) => {
   const options = normalizeOptions(rawOptions);
-
   return (
     <div className="sf-field" role="group" aria-labelledby={`${name}-legend`}>
       <span id={`${name}-legend`} className="sf-label">

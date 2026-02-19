@@ -1,15 +1,24 @@
 {
   "name": "react-dynamic-smartform",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "Lightweight schema-driven dynamic form builder for React",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "style": "dist/styles.css",
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./dist/styles.css": "./dist/styles.css"
+  },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --external react",
+    "build": "tsup src/index.ts --format cjs,esm --dts --external react && cp src/styles.css dist/styles.css",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
@@ -17,7 +26,12 @@
     "form",
     "dynamic-form",
     "schema-driven",
-    "typescript"
+    "form-builder",
+    "typescript",
+    "validation",
+    "multi-step-form",
+    "conditional-fields",
+    "react-form"
   ],
   "author": "",
   "license": "ISC",

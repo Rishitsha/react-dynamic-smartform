@@ -1,0 +1,168 @@
+/* SmartForm base styles — lightweight, BEM-ish, fully overridable */
+.sf-form {
+    width: 100%;
+  }
+  
+  .sf-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--sf-grid-cols, 12), 1fr);
+    gap: 1rem;
+  }
+  
+  .sf-field-wrapper {
+    grid-column: span var(--sf-grid-cols, 12); /* full width by default */
+    min-width: 0;
+  }
+  
+  /* Field */
+  .sf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  /* Label */
+  .sf-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .sf-required {
+    color: #ef4444;
+  }
+  
+  /* Input / Select / Textarea */
+  .sf-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background: #fff;
+    color: #111827;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+  }
+  
+  .sf-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+  
+  .sf-input:disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  .sf-input--error {
+    border-color: #ef4444;
+  }
+  
+  .sf-input--error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  }
+  
+  .sf-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  /* Checkbox */
+  .sf-field--checkbox {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .sf-label--checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: 400;
+  }
+  
+  .sf-checkbox {
+    width: 1rem;
+    height: 1rem;
+    accent-color: #6366f1;
+    flex-shrink: 0;
+  }
+  
+  /* Radio */
+  .sf-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  
+  .sf-label--radio {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
+  
+  .sf-radio {
+    accent-color: #6366f1;
+  }
+  
+  /* Help & Error */
+  .sf-help {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
+  }
+  
+  .sf-error {
+    font-size: 0.75rem;
+    color: #ef4444;
+    margin: 0;
+  }
+  
+  /* Actions */
+  .sf-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+  
+  /* Buttons */
+  .sf-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+  }
+  
+  .sf-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .sf-btn--primary {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+  }
+  
+  .sf-btn--primary:hover:not(:disabled) {
+    background: #4f46e5;
+  }
+  
+  .sf-btn--ghost {
+    background: transparent;
+    color: #374151;
+    border-color: #d1d5db;
+  }
+  
+  .sf-btn--ghost:hover:not(:disabled) {
+    background: #f3f4f6;
+  }

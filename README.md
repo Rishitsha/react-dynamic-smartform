@@ -111,6 +111,12 @@ export default App;
 | `defaultValues` | `object` | Initial form values |
 | `submitLabel` | `string` | Submit button text |
 
+## 🚀 Live Demo
+
+See **react-dynamic-smartform** in action! Check out the interactive playground below to see how schemas are rendered into real forms:
+
+[**👉 Click here to open Live Interactive Demo on CodeSandbox**](https://codesandbox.io/p/sandbox/npchpm?file=%2Fsrc%2FApp.tsx%3A38%2C11)
+
 ---
 
 

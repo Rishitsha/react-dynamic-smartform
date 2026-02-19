@@ -22,7 +22,6 @@ const SelectField = ({
   optionsUrl,
 }: SelectFieldProps) => {
   const { options, loading } = useOptions(staticOptions, optionsUrl);
-
   return (
     <div className="sf-field">
       <label htmlFor={name} className="sf-label">
@@ -42,9 +41,7 @@ const SelectField = ({
       >
         <option value="">{loading ? "Loading…" : (placeholder || "Select an option")}</option>
         {options.map(o => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
+          <option key={o.value} value={o.value}>{o.label}</option>
         ))}
       </select>
       {helpText && !error && (
