@@ -30,5 +30,13 @@
     "@types/react": "^19.2.13",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
-  }
+  },
+  "repository": {
+  "type": "git",
+  "url": "git+https://github.com/Rishitsha/react-dynamic-smartform.git"
+},
+  "bugs": {
+    "url": "https://github.com/Rishitsha/react-dynamic-smartform/issues"
+  },
+  "homepage": "https://github.com/Rishitsha/react-dynamic-smartform#readme"
 }
