@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "lib": ["ES2018", "DOM"],
+      "module": "ESNext",
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "jsx": "react-jsx", 
+      "strict": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "skipLibCheck": true
+    },
+    "include": ["src"]
+  }
+  
