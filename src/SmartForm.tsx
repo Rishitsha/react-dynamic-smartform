@@ -1,16 +1,23 @@
 import React, { useCallback } from "react";
 import { FieldSchema, SmartFormProps } from "./types";
 import { useSmartForm } from "./useSmartForm";
+import { useSchemaValidation } from "./utils/Schemavalidator";
 import TextField from "./fields/TextField";
 import SelectField from "./fields/SelectField";
 import NumberField from "./fields/NumberField";
 import TextareaField from "./fields/TextAreaField";
 import RadioField from "./fields/RadioField";
 import CheckboxField from "./fields/CheckboxField";
-
+import DateRangeField from "./fields/DateRangeField";
+import FileUploadField from "./fields/FileUploadField";
+import SignaturePad from "./fields/SignaturePad";
+import RatingField, { SliderField } from "./fields/RatingField";
+import ColorPickerField from "./fields/ColorPickerField";
+import OTPField from "./fields/OTPField";
+import RepeatableField from "./fields/RepeatableField";
 
 const SmartForm: React.FC<SmartFormProps> = ({
-  schema,
+  schema = [],
   onSubmit,
   onChange,
   defaultValues,
@@ -18,6 +25,9 @@ const SmartForm: React.FC<SmartFormProps> = ({
   className = "",
   gridCols = 12,
 }) => {
+  // Dev-time schema validation
+  useSchemaValidation(schema);
+
   const {
     values,
     errors,
@@ -46,13 +56,12 @@ const SmartForm: React.FC<SmartFormProps> = ({
 
   const renderField = useCallback(
     (field: FieldSchema) => {
-      // Conditional visibility
       if (field.showIf && !field.showIf(values)) return null;
-
       const isDisabled =
         typeof field.disabled === "function"
           ? field.disabled(values)
           : !!field.disabled;
+      const colStyle = field.col ? { gridColumn: `span ${field.col}` } : undefined;
 
       const commonProps = {
         name: field.name,
@@ -67,12 +76,7 @@ const SmartForm: React.FC<SmartFormProps> = ({
         required: !!field.validation?.required,
       };
 
-      const colStyle = field.col
-        ? { gridColumn: `span ${field.col}` }
-        : undefined;
-
       let fieldEl: React.ReactNode;
-
       switch (field.type) {
         case "text":
           fieldEl = <TextField {...commonProps} />;
@@ -106,6 +110,61 @@ const SmartForm: React.FC<SmartFormProps> = ({
           break;
         case "checkbox":
           fieldEl = <CheckboxField {...commonProps} />;
+          break;
+        // ── NEW FIELD TYPES ──────────────────────────────────────────────────
+        case "daterange":
+          fieldEl = (
+            <DateRangeField
+              {...commonProps}
+              startLabel={field.startLabel}
+              endLabel={field.endLabel}
+            />
+          );
+          break;
+        case "file":
+          fieldEl = (
+            <FileUploadField
+              {...commonProps}
+              multiple={field.multiple}
+              accept={field.accept}
+              maxSize={field.maxSize}
+            />
+          );
+          break;
+        case "signature":
+          fieldEl = <SignaturePad {...commonProps} />;
+          break;
+        case "rating":
+          fieldEl = <RatingField {...commonProps} stars={field.stars} />;
+          break;
+        case "slider":
+          fieldEl = (
+            <SliderField
+              {...commonProps}
+              min={field.min}
+              max={field.max}
+              step={field.step}
+              showValue={field.showValue}
+            />
+          );
+          break;
+        case "colorpicker":
+          fieldEl = <ColorPickerField {...commonProps} />;
+          break;
+        case "otp":
+          fieldEl = <OTPField {...commonProps} otpLength={field.otpLength} />;
+          break;
+        case "repeatable":
+          fieldEl = (
+            <RepeatableField
+              {...commonProps}
+              fields={field.fields ?? []}
+              addLabel={field.addLabel}
+              removeLabel={field.removeLabel}
+              minRows={field.validation?.minRows}
+              maxRows={field.validation?.maxRows}
+            />
+          );
           break;
         default:
           fieldEl = <TextField {...commonProps} />;
