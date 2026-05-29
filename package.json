@@ -1,36 +1,27 @@
 {
   "name": "react-dynamic-smartform",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Lightweight schema-driven dynamic form builder for React",
-
   "type": "module",
-
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-
   "style": "./dist/styles.css",
-
   "files": [
     "dist"
   ],
-
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
-
     "./styles.css": "./dist/styles.css"
   },
-
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts && cp src/styles.css dist/styles.css",
-
     "prepublishOnly": "npm run build"
   },
-
   "keywords": [
     "react",
     "form",
@@ -43,30 +34,23 @@
     "conditional-fields",
     "react-form"
   ],
-
   "author": "",
-
   "license": "ISC",
-
   "peerDependencies": {
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0"
   },
-
   "devDependencies": {
     "@types/react": "^19.2.13",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Rishitsha/react-dynamic-smartform.git"
   },
-
   "bugs": {
     "url": "https://github.com/Rishitsha/react-dynamic-smartform/issues"
   },
-
   "homepage": "https://github.com/Rishitsha/react-dynamic-smartform#readme"
 }
