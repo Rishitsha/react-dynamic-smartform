@@ -58,7 +58,7 @@ pnpm add react-dynamic-smartform
 ### 1️⃣ Define a Schema
  
 ```ts
-import { FieldSchema } from "react-dynamic-smartform";
+import type { FieldSchema } from "react-dynamic-smartform";
  
 const schema: FieldSchema[] = [
   {
@@ -99,7 +99,7 @@ const schema: FieldSchema[] = [
  
 ```tsx
 import { SmartForm } from "react-dynamic-smartform";
-import "react-dynamic-smartform/dist/smartform.css";
+import "react-dynamic-smartform/styles.css";
  
 function App() {
   return (

@@ -1,12 +1,7 @@
-"use strict";
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
@@ -22,27 +17,6 @@ var __spreadValues = (a, b) => {
   return a;
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var __async = (__this, __arguments, generator) => {
   return new Promise((resolve, reject) => {
     var fulfilled = (value) => {
@@ -64,42 +38,11 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 
-// src/index.ts
-var index_exports = {};
-__export(index_exports, {
-  CheckboxField: () => CheckboxField_default,
-  ColorPickerField: () => ColorPickerField_default,
-  DateRangeField: () => DateRangeField_default,
-  FieldRenderer: () => FieldRenderer,
-  FileUploadField: () => FileUploadField_default,
-  FormBuilder: () => FormBuilder_default,
-  NumberField: () => NumberField_default,
-  OTPField: () => OTPField_default,
-  RadioField: () => RadioField_default,
-  RatingField: () => RatingField_default,
-  RepeatableField: () => RepeatableField_default,
-  SelectField: () => SelectField_default,
-  SignaturePad: () => SignaturePad_default,
-  SliderField: () => SliderField,
-  SmartForm: () => SmartForm_default,
-  SmartFormWizard: () => SmartFormWizard_default,
-  TextField: () => TextField_default,
-  generateStories: () => generateStories,
-  generateStoriesFile: () => generateStoriesFile,
-  useFormState: () => useFormState,
-  useSchemaValidation: () => useSchemaValidation,
-  useSmartForm: () => useSmartForm,
-  validateField: () => validateField,
-  validateForm: () => validateForm,
-  validateSchema: () => validateSchema
-});
-module.exports = __toCommonJS(index_exports);
-
 // src/SmartForm.tsx
-var import_react9 = require("react");
+import { useCallback as useCallback6 } from "react";
 
 // src/useSmartForm.tsx
-var import_react = require("react");
+import { useState, useCallback, useRef, useEffect } from "react";
 
 // src/ValidationField.tsx
 var EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -162,16 +105,16 @@ function getInitialValues(schema, defaultValues) {
   return values;
 }
 function useSmartForm(schema, defaultValues, onChange, debounceMs = 0) {
-  const [values, setValues] = (0, import_react.useState)(
+  const [values, setValues] = useState(
     () => getInitialValues(schema, defaultValues)
   );
-  const [errors, setErrors] = (0, import_react.useState)({});
-  const [touched, setTouched] = (0, import_react.useState)({});
-  const [isSubmitting, setIsSubmitting] = (0, import_react.useState)(false);
-  const debounceRef = (0, import_react.useRef)(null);
-  const onChangeRef = (0, import_react.useRef)(onChange);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const debounceRef = useRef(null);
+  const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
-  const handleChange = (0, import_react.useCallback)(
+  const handleChange = useCallback(
     (name, rawValue) => {
       const field = schema.find((f) => f.name === name);
       const value = (field == null ? void 0 : field.transform) ? field.transform(rawValue) : rawValue;
@@ -198,7 +141,7 @@ function useSmartForm(schema, defaultValues, onChange, debounceMs = 0) {
     },
     [schema, touched, debounceMs]
   );
-  const handleBlur = (0, import_react.useCallback)(
+  const handleBlur = useCallback(
     (name) => {
       setTouched((prev) => __spreadProps(__spreadValues({}, prev), { [name]: true }));
       const field = schema.find((f) => f.name === name);
@@ -209,7 +152,7 @@ function useSmartForm(schema, defaultValues, onChange, debounceMs = 0) {
     },
     [schema, values]
   );
-  const validate = (0, import_react.useCallback)(() => {
+  const validate = useCallback(() => {
     const errs = validateForm(schema, values);
     setErrors(errs);
     const allTouched = {};
@@ -217,13 +160,13 @@ function useSmartForm(schema, defaultValues, onChange, debounceMs = 0) {
     setTouched(allTouched);
     return Object.keys(errs).length === 0;
   }, [schema, values]);
-  const reset = (0, import_react.useCallback)(() => {
+  const reset = useCallback(() => {
     setValues(getInitialValues(schema, defaultValues));
     setErrors({});
     setTouched({});
     setIsSubmitting(false);
   }, [schema, defaultValues]);
-  (0, import_react.useEffect)(() => {
+  useEffect(() => {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
@@ -400,7 +343,7 @@ function useSchemaValidation(schema) {
 }
 
 // src/fields/TextField.tsx
-var import_jsx_runtime = require("react/jsx-runtime");
+import { jsx, jsxs } from "react/jsx-runtime";
 var TextField = ({
   name,
   label,
@@ -413,12 +356,12 @@ var TextField = ({
   helpText,
   required,
   type = "text"
-}) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "sf-field", children: [
-  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { htmlFor: name, className: "sf-label", children: [
+}) => /* @__PURE__ */ jsxs("div", { className: "sf-field", children: [
+  /* @__PURE__ */ jsxs("label", { htmlFor: name, className: "sf-label", children: [
     label,
-    required && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
+    required && /* @__PURE__ */ jsx("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
   ] }),
-  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+  /* @__PURE__ */ jsx(
     "input",
     {
       id: name,
@@ -434,22 +377,22 @@ var TextField = ({
       "aria-describedby": error ? `${name}-error` : helpText ? `${name}-help` : void 0
     }
   ),
-  helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
-  error && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
+  helpText && !error && /* @__PURE__ */ jsx("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
+  error && /* @__PURE__ */ jsx("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
 ] });
 var TextField_default = TextField;
 
 // src/useOptions.ts
-var import_react2 = require("react");
+import { useState as useState2, useEffect as useEffect2 } from "react";
 var cache = {};
 function useOptions(staticOptions, url) {
-  const [options, setOptions] = (0, import_react2.useState)(() => {
+  const [options, setOptions] = useState2(() => {
     if (staticOptions) return normalizeOptions(staticOptions);
     if (url && cache[url]) return cache[url];
     return [];
   });
-  const [loading, setLoading] = (0, import_react2.useState)(!!url && !cache[url]);
-  (0, import_react2.useEffect)(() => {
+  const [loading, setLoading] = useState2(!!url && !cache[url]);
+  useEffect2(() => {
     if (!url) return;
     if (cache[url]) {
       setOptions(cache[url]);
@@ -479,7 +422,7 @@ function normalizeOptions(opts) {
 }
 
 // src/fields/SelectField.tsx
-var import_jsx_runtime2 = require("react/jsx-runtime");
+import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
 var SelectField = ({
   name,
   label,
@@ -495,12 +438,12 @@ var SelectField = ({
   optionsUrl
 }) => {
   const { options, loading } = useOptions(staticOptions, optionsUrl);
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { htmlFor: name, className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs2("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs2("label", { htmlFor: name, className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
+      required && /* @__PURE__ */ jsx2("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    /* @__PURE__ */ jsxs2(
       "select",
       {
         id: name,
@@ -513,19 +456,19 @@ var SelectField = ({
         "aria-invalid": !!error,
         "aria-describedby": error ? `${name}-error` : helpText ? `${name}-help` : void 0,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { value: "", children: loading ? "Loading\u2026" : placeholder || "Select an option" }),
-          options.map((o) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("option", { value: o.value, children: o.label }, o.value))
+          /* @__PURE__ */ jsx2("option", { value: "", children: loading ? "Loading\u2026" : placeholder || "Select an option" }),
+          options.map((o) => /* @__PURE__ */ jsx2("option", { value: o.value, children: o.label }, o.value))
         ]
       }
     ),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx2("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx2("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
   ] });
 };
 var SelectField_default = SelectField;
 
 // src/fields/NumberField.tsx
-var import_jsx_runtime3 = require("react/jsx-runtime");
+import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
 var NumberField = ({
   name,
   label,
@@ -537,12 +480,12 @@ var NumberField = ({
   disabled,
   helpText,
   required
-}) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "sf-field", children: [
-  /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("label", { htmlFor: name, className: "sf-label", children: [
+}) => /* @__PURE__ */ jsxs3("div", { className: "sf-field", children: [
+  /* @__PURE__ */ jsxs3("label", { htmlFor: name, className: "sf-label", children: [
     label,
-    required && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
+    required && /* @__PURE__ */ jsx3("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
   ] }),
-  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+  /* @__PURE__ */ jsx3(
     "input",
     {
       id: name,
@@ -558,13 +501,13 @@ var NumberField = ({
       "aria-describedby": error ? `${name}-error` : helpText ? `${name}-help` : void 0
     }
   ),
-  helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
-  error && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
+  helpText && !error && /* @__PURE__ */ jsx3("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
+  error && /* @__PURE__ */ jsx3("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
 ] });
 var NumberField_default = NumberField;
 
 // src/fields/TextAreaField.tsx
-var import_jsx_runtime4 = require("react/jsx-runtime");
+import { jsx as jsx4, jsxs as jsxs4 } from "react/jsx-runtime";
 var TextareaField = ({
   name,
   label,
@@ -577,12 +520,12 @@ var TextareaField = ({
   helpText,
   required,
   rows = 4
-}) => /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "sf-field", children: [
-  /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { htmlFor: name, className: "sf-label", children: [
+}) => /* @__PURE__ */ jsxs4("div", { className: "sf-field", children: [
+  /* @__PURE__ */ jsxs4("label", { htmlFor: name, className: "sf-label", children: [
     label,
-    required && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
+    required && /* @__PURE__ */ jsx4("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
   ] }),
-  /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+  /* @__PURE__ */ jsx4(
     "textarea",
     {
       id: name,
@@ -598,13 +541,13 @@ var TextareaField = ({
       "aria-describedby": error ? `${name}-error` : helpText ? `${name}-help` : void 0
     }
   ),
-  helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
-  error && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
+  helpText && !error && /* @__PURE__ */ jsx4("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
+  error && /* @__PURE__ */ jsx4("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
 ] });
 var TextAreaField_default = TextareaField;
 
 // src/fields/RadioField.tsx
-var import_jsx_runtime5 = require("react/jsx-runtime");
+import { jsx as jsx5, jsxs as jsxs5 } from "react/jsx-runtime";
 var RadioField = ({
   name,
   label,
@@ -618,13 +561,13 @@ var RadioField = ({
   options: rawOptions = []
 }) => {
   const options = normalizeOptions(rawOptions);
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: "sf-field", role: "group", "aria-labelledby": `${name}-legend`, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("span", { id: `${name}-legend`, className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs5("div", { className: "sf-field", role: "group", "aria-labelledby": `${name}-legend`, children: [
+    /* @__PURE__ */ jsxs5("span", { id: `${name}-legend`, className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
+      required && /* @__PURE__ */ jsx5("span", { className: "sf-required", "aria-hidden": "true", children: " *" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "sf-radio-group", children: options.map((opt) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("label", { className: "sf-label--radio", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+    /* @__PURE__ */ jsx5("div", { className: "sf-radio-group", children: options.map((opt) => /* @__PURE__ */ jsxs5("label", { className: "sf-label--radio", children: [
+      /* @__PURE__ */ jsx5(
         "input",
         {
           type: "radio",
@@ -637,16 +580,16 @@ var RadioField = ({
           className: "sf-radio"
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { children: opt.label })
+      /* @__PURE__ */ jsx5("span", { children: opt.label })
     ] }, opt.value)) }),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx5("p", { className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx5("p", { className: "sf-error", role: "alert", children: error })
   ] });
 };
 var RadioField_default = RadioField;
 
 // src/fields/CheckboxField.tsx
-var import_jsx_runtime6 = require("react/jsx-runtime");
+import { jsx as jsx6, jsxs as jsxs6 } from "react/jsx-runtime";
 var CheckboxField = ({
   name,
   label,
@@ -656,9 +599,9 @@ var CheckboxField = ({
   error,
   disabled,
   helpText
-}) => /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "sf-field sf-field--checkbox", children: [
-  /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { htmlFor: name, className: "sf-label sf-label--checkbox", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+}) => /* @__PURE__ */ jsxs6("div", { className: "sf-field sf-field--checkbox", children: [
+  /* @__PURE__ */ jsxs6("label", { htmlFor: name, className: "sf-label sf-label--checkbox", children: [
+    /* @__PURE__ */ jsx6(
       "input",
       {
         id: name,
@@ -672,15 +615,15 @@ var CheckboxField = ({
         "aria-invalid": !!error
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { children: label })
+    /* @__PURE__ */ jsx6("span", { children: label })
   ] }),
-  helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
-  error && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
+  helpText && !error && /* @__PURE__ */ jsx6("p", { id: `${name}-help`, className: "sf-help", children: helpText }),
+  error && /* @__PURE__ */ jsx6("p", { id: `${name}-error`, className: "sf-error", role: "alert", children: error })
 ] });
 var CheckboxField_default = CheckboxField;
 
 // src/fields/DateRangeField.tsx
-var import_jsx_runtime7 = require("react/jsx-runtime");
+import { jsx as jsx7, jsxs as jsxs7 } from "react/jsx-runtime";
 var DateRangeField = ({
   name,
   label,
@@ -703,15 +646,15 @@ var DateRangeField = ({
   const handleEnd = (e) => {
     onChange({ start, end: e.target.value });
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("label", { className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs7("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs7("label", { className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { className: "sf-required", children: " *" })
+      required && /* @__PURE__ */ jsx7("span", { className: "sf-required", children: " *" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "sf-daterange", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "sf-daterange__group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "sf-daterange__sublabel", children: startLabel }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+    /* @__PURE__ */ jsxs7("div", { className: "sf-daterange", children: [
+      /* @__PURE__ */ jsxs7("div", { className: "sf-daterange__group", children: [
+        /* @__PURE__ */ jsx7("label", { className: "sf-daterange__sublabel", children: startLabel }),
+        /* @__PURE__ */ jsx7(
           "input",
           {
             id: `${name}-start`,
@@ -726,10 +669,10 @@ var DateRangeField = ({
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "sf-daterange__separator", children: "\u2192" }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "sf-daterange__group", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("label", { className: "sf-daterange__sublabel", children: endLabel }),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+      /* @__PURE__ */ jsx7("div", { className: "sf-daterange__separator", children: "\u2192" }),
+      /* @__PURE__ */ jsxs7("div", { className: "sf-daterange__group", children: [
+        /* @__PURE__ */ jsx7("label", { className: "sf-daterange__sublabel", children: endLabel }),
+        /* @__PURE__ */ jsx7(
           "input",
           {
             id: `${name}-end`,
@@ -745,15 +688,15 @@ var DateRangeField = ({
         )
       ] })
     ] }),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx7("p", { className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx7("p", { className: "sf-error", role: "alert", children: error })
   ] });
 };
 var DateRangeField_default = DateRangeField;
 
 // src/fields/FileUploadField.tsx
-var import_react3 = require("react");
-var import_jsx_runtime8 = require("react/jsx-runtime");
+import { useRef as useRef2, useState as useState3, useCallback as useCallback2 } from "react";
+import { jsx as jsx8, jsxs as jsxs8 } from "react/jsx-runtime";
 function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -773,13 +716,13 @@ var FileUploadField = ({
   accept,
   maxSize
 }) => {
-  const inputRef = (0, import_react3.useRef)(null);
-  const [dragging, setDragging] = (0, import_react3.useState)(false);
-  const [files, setFiles] = (0, import_react3.useState)(
+  const inputRef = useRef2(null);
+  const [dragging, setDragging] = useState3(false);
+  const [files, setFiles] = useState3(
     Array.isArray(value) ? value : []
   );
-  const [localError, setLocalError] = (0, import_react3.useState)();
-  const processFiles = (0, import_react3.useCallback)(
+  const [localError, setLocalError] = useState3();
+  const processFiles = useCallback2(
     (incoming) => {
       var _a;
       const arr = Array.from(incoming);
@@ -809,7 +752,7 @@ var FileUploadField = ({
     },
     [files, multiple, accept, maxSize, onChange]
   );
-  const handleDrop = (0, import_react3.useCallback)(
+  const handleDrop = useCallback2(
     (e) => {
       e.preventDefault();
       setDragging(false);
@@ -828,12 +771,12 @@ var FileUploadField = ({
     const validFiles = next.filter((f) => !f.error).map((f) => f.file);
     onChange(multiple ? validFiles : (_a = validFiles[0]) != null ? _a : null);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs8("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs8("label", { className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "sf-required", children: " *" })
+      required && /* @__PURE__ */ jsx8("span", { className: "sf-required", children: " *" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(
+    /* @__PURE__ */ jsxs8(
       "div",
       {
         className: `sf-dropzone${dragging ? " sf-dropzone--active" : ""}${disabled ? " sf-dropzone--disabled" : ""}${error ? " sf-dropzone--error" : ""}`,
@@ -856,7 +799,7 @@ var FileUploadField = ({
         },
         "aria-label": `Upload ${label}`,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          /* @__PURE__ */ jsx8(
             "input",
             {
               ref: inputRef,
@@ -871,17 +814,17 @@ var FileUploadField = ({
               "aria-hidden": "true"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "sf-dropzone__icon", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("svg", { width: "32", height: "32", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("polyline", { points: "17 8 12 3 7 8" }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("line", { x1: "12", y1: "3", x2: "12", y2: "15" })
+          /* @__PURE__ */ jsx8("div", { className: "sf-dropzone__icon", children: /* @__PURE__ */ jsxs8("svg", { width: "32", height: "32", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", children: [
+            /* @__PURE__ */ jsx8("path", { d: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" }),
+            /* @__PURE__ */ jsx8("polyline", { points: "17 8 12 3 7 8" }),
+            /* @__PURE__ */ jsx8("line", { x1: "12", y1: "3", x2: "12", y2: "15" })
           ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "sf-dropzone__text", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("strong", { children: "Drag & drop" }),
+          /* @__PURE__ */ jsxs8("p", { className: "sf-dropzone__text", children: [
+            /* @__PURE__ */ jsx8("strong", { children: "Drag & drop" }),
             " or ",
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "sf-dropzone__link", children: "browse" })
+            /* @__PURE__ */ jsx8("span", { className: "sf-dropzone__link", children: "browse" })
           ] }),
-          accept && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "sf-dropzone__hint", children: [
+          accept && /* @__PURE__ */ jsxs8("p", { className: "sf-dropzone__hint", children: [
             "Allowed: ",
             accept,
             " ",
@@ -890,17 +833,17 @@ var FileUploadField = ({
         ]
       }
     ),
-    files.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("ul", { className: "sf-file-list", children: files.map((fw, idx) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("li", { className: `sf-file-item${fw.error ? " sf-file-item--error" : ""}`, children: [
-      fw.previewUrl && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("img", { src: fw.previewUrl, alt: fw.file.name, className: "sf-file-preview" }),
-      !fw.previewUrl && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "sf-file-icon", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("path", { d: "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("polyline", { points: "14 2 14 8 20 8" })
+    files.length > 0 && /* @__PURE__ */ jsx8("ul", { className: "sf-file-list", children: files.map((fw, idx) => /* @__PURE__ */ jsxs8("li", { className: `sf-file-item${fw.error ? " sf-file-item--error" : ""}`, children: [
+      fw.previewUrl && /* @__PURE__ */ jsx8("img", { src: fw.previewUrl, alt: fw.file.name, className: "sf-file-preview" }),
+      !fw.previewUrl && /* @__PURE__ */ jsx8("div", { className: "sf-file-icon", children: /* @__PURE__ */ jsxs8("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: [
+        /* @__PURE__ */ jsx8("path", { d: "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" }),
+        /* @__PURE__ */ jsx8("polyline", { points: "14 2 14 8 20 8" })
       ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "sf-file-info", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "sf-file-name", children: fw.file.name }),
-        fw.error ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "sf-file-error", children: fw.error }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "sf-file-size", children: formatBytes(fw.file.size) })
+      /* @__PURE__ */ jsxs8("div", { className: "sf-file-info", children: [
+        /* @__PURE__ */ jsx8("span", { className: "sf-file-name", children: fw.file.name }),
+        fw.error ? /* @__PURE__ */ jsx8("span", { className: "sf-file-error", children: fw.error }) : /* @__PURE__ */ jsx8("span", { className: "sf-file-size", children: formatBytes(fw.file.size) })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      /* @__PURE__ */ jsx8(
         "button",
         {
           type: "button",
@@ -914,15 +857,15 @@ var FileUploadField = ({
         }
       )
     ] }, idx)) }),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx8("p", { className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx8("p", { className: "sf-error", role: "alert", children: error })
   ] });
 };
 var FileUploadField_default = FileUploadField;
 
 // src/fields/SignaturePad.tsx
-var import_react4 = require("react");
-var import_jsx_runtime9 = require("react/jsx-runtime");
+import { useRef as useRef3, useEffect as useEffect3, useState as useState4, useCallback as useCallback3 } from "react";
+import { jsx as jsx9, jsxs as jsxs9 } from "react/jsx-runtime";
 var SignaturePad = ({
   name,
   label,
@@ -934,11 +877,11 @@ var SignaturePad = ({
   helpText,
   required
 }) => {
-  const canvasRef = (0, import_react4.useRef)(null);
-  const [drawing, setDrawing] = (0, import_react4.useState)(false);
-  const [isEmpty, setIsEmpty] = (0, import_react4.useState)(!value);
-  const lastPos = (0, import_react4.useRef)(null);
-  (0, import_react4.useEffect)(() => {
+  const canvasRef = useRef3(null);
+  const [drawing, setDrawing] = useState4(false);
+  const [isEmpty, setIsEmpty] = useState4(!value);
+  const lastPos = useRef3(null);
+  useEffect3(() => {
     if (!value || !canvasRef.current) return;
     const img = new Image();
     img.onload = () => {
@@ -956,7 +899,7 @@ var SignaturePad = ({
     }
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   };
-  const startDrawing = (0, import_react4.useCallback)((e) => {
+  const startDrawing = useCallback3((e) => {
     if (disabled) return;
     e.preventDefault();
     const canvas = canvasRef.current;
@@ -969,7 +912,7 @@ var SignaturePad = ({
     ctx.moveTo(pos.x, pos.y);
     lastPos.current = pos;
   }, [disabled]);
-  const draw = (0, import_react4.useCallback)((e) => {
+  const draw = useCallback3((e) => {
     if (!drawing || disabled) return;
     e.preventDefault();
     const canvas = canvasRef.current;
@@ -984,7 +927,7 @@ var SignaturePad = ({
     ctx.stroke();
     lastPos.current = pos;
   }, [drawing, disabled]);
-  const stopDrawing = (0, import_react4.useCallback)(() => {
+  const stopDrawing = useCallback3(() => {
     if (!drawing) return;
     setDrawing(false);
     const canvas = canvasRef.current;
@@ -1002,13 +945,13 @@ var SignaturePad = ({
     setIsEmpty(true);
     onChange(null);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("label", { className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs9("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs9("label", { className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { className: "sf-required", children: " *" })
+      required && /* @__PURE__ */ jsx9("span", { className: "sf-required", children: " *" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: `sf-signature${error ? " sf-signature--error" : ""}${disabled ? " sf-signature--disabled" : ""}`, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+    /* @__PURE__ */ jsxs9("div", { className: `sf-signature${error ? " sf-signature--error" : ""}${disabled ? " sf-signature--disabled" : ""}`, children: [
+      /* @__PURE__ */ jsx9(
         "canvas",
         {
           ref: canvasRef,
@@ -1027,8 +970,8 @@ var SignaturePad = ({
           role: "img"
         }
       ),
-      isEmpty && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "sf-signature__placeholder", "aria-hidden": "true", children: "Sign here" }),
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+      isEmpty && /* @__PURE__ */ jsx9("div", { className: "sf-signature__placeholder", "aria-hidden": "true", children: "Sign here" }),
+      /* @__PURE__ */ jsxs9(
         "button",
         {
           type: "button",
@@ -1037,25 +980,25 @@ var SignaturePad = ({
           disabled: disabled || isEmpty,
           title: "Clear signature",
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("polyline", { points: "3 6 5 6 21 6" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("path", { d: "M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("path", { d: "M10 11v6M14 11v6" })
+            /* @__PURE__ */ jsxs9("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: [
+              /* @__PURE__ */ jsx9("polyline", { points: "3 6 5 6 21 6" }),
+              /* @__PURE__ */ jsx9("path", { d: "M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" }),
+              /* @__PURE__ */ jsx9("path", { d: "M10 11v6M14 11v6" })
             ] }),
             "Clear"
           ]
         }
       )
     ] }),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx9("p", { className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx9("p", { className: "sf-error", role: "alert", children: error })
   ] });
 };
 var SignaturePad_default = SignaturePad;
 
 // src/fields/RatingField.tsx
-var import_react5 = require("react");
-var import_jsx_runtime10 = require("react/jsx-runtime");
+import { useState as useState5 } from "react";
+import { jsx as jsx10, jsxs as jsxs10 } from "react/jsx-runtime";
 var RatingField = ({
   name,
   label,
@@ -1069,14 +1012,14 @@ var RatingField = ({
   stars = 5
 }) => {
   var _a;
-  const [hovered, setHovered] = (0, import_react5.useState)(null);
+  const [hovered, setHovered] = useState5(null);
   const current = (_a = hovered != null ? hovered : value) != null ? _a : 0;
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs10("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs10("label", { className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "sf-required", children: " *" })
+      required && /* @__PURE__ */ jsx10("span", { className: "sf-required", children: " *" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+    /* @__PURE__ */ jsxs10(
       "div",
       {
         className: "sf-rating",
@@ -1087,7 +1030,7 @@ var RatingField = ({
           Array.from({ length: stars }, (_, i) => {
             const starVal = i + 1;
             const filled = starVal <= current;
-            return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            return /* @__PURE__ */ jsx10(
               "button",
               {
                 type: "button",
@@ -1103,7 +1046,7 @@ var RatingField = ({
                 },
                 onMouseEnter: () => !disabled && setHovered(starVal),
                 disabled,
-                children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { viewBox: "0 0 24 24", width: "28", height: "28", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                children: /* @__PURE__ */ jsx10("svg", { viewBox: "0 0 24 24", width: "28", height: "28", children: /* @__PURE__ */ jsx10(
                   "polygon",
                   {
                     points: "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2",
@@ -1116,7 +1059,7 @@ var RatingField = ({
               starVal
             );
           }),
-          value > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { className: "sf-rating__value", children: [
+          value > 0 && /* @__PURE__ */ jsxs10("span", { className: "sf-rating__value", children: [
             value,
             " / ",
             stars
@@ -1124,8 +1067,8 @@ var RatingField = ({
         ]
       }
     ),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx10("p", { className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx10("p", { className: "sf-error", role: "alert", children: error })
   ] });
 };
 var SliderField = ({
@@ -1144,14 +1087,14 @@ var SliderField = ({
   showValue = true
 }) => {
   const pct = ((value != null ? value : min) - min) / (max - min);
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { htmlFor: name, className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs10("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs10("label", { htmlFor: name, className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "sf-required", children: " *" }),
-      showValue && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "sf-slider__badge", children: value != null ? value : min })
+      required && /* @__PURE__ */ jsx10("span", { className: "sf-required", children: " *" }),
+      showValue && /* @__PURE__ */ jsx10("span", { className: "sf-slider__badge", children: value != null ? value : min })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "sf-slider__track-wrap", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    /* @__PURE__ */ jsxs10("div", { className: "sf-slider__track-wrap", children: [
+      /* @__PURE__ */ jsx10(
         "input",
         {
           id: name,
@@ -1170,20 +1113,20 @@ var SliderField = ({
           style: { "--pct": `${pct * 100}%` }
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "sf-slider__labels", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: min }),
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: max })
+      /* @__PURE__ */ jsxs10("div", { className: "sf-slider__labels", children: [
+        /* @__PURE__ */ jsx10("span", { children: min }),
+        /* @__PURE__ */ jsx10("span", { children: max })
       ] })
     ] }),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx10("p", { className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx10("p", { className: "sf-error", role: "alert", children: error })
   ] });
 };
 var RatingField_default = RatingField;
 
 // src/fields/ColorPickerField.tsx
-var import_react6 = require("react");
-var import_jsx_runtime11 = require("react/jsx-runtime");
+import { useState as useState6, useRef as useRef4, useEffect as useEffect4 } from "react";
+import { jsx as jsx11, jsxs as jsxs11 } from "react/jsx-runtime";
 var PRESET_COLORS = [
   "#ef4444",
   "#f97316",
@@ -1223,17 +1166,17 @@ var ColorPickerField = ({
   helpText,
   required
 }) => {
-  const [open, setOpen] = (0, import_react6.useState)(false);
-  const [hex, setHex] = (0, import_react6.useState)(value || "#6366f1");
-  const [rgba, setRgba] = (0, import_react6.useState)(() => hexToRgba(value || "#6366f1"));
-  const panelRef = (0, import_react6.useRef)(null);
-  (0, import_react6.useEffect)(() => {
+  const [open, setOpen] = useState6(false);
+  const [hex, setHex] = useState6(value || "#6366f1");
+  const [rgba, setRgba] = useState6(() => hexToRgba(value || "#6366f1"));
+  const panelRef = useRef4(null);
+  useEffect4(() => {
     if (value && value !== hex) {
       setHex(value);
       setRgba(hexToRgba(value));
     }
   }, [value]);
-  (0, import_react6.useEffect)(() => {
+  useEffect4(() => {
     const handler = (e) => {
       if (panelRef.current && !panelRef.current.contains(e.target)) {
         setOpen(false);
@@ -1259,13 +1202,13 @@ var ColorPickerField = ({
     setHex(h);
     onChange(a < 1 ? `rgba(${r},${g},${b},${a})` : h);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("label", { className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs11("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs11("label", { className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { className: "sf-required", children: " *" })
+      required && /* @__PURE__ */ jsx11("span", { className: "sf-required", children: " *" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sf-color", ref: panelRef, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+    /* @__PURE__ */ jsxs11("div", { className: "sf-color", ref: panelRef, children: [
+      /* @__PURE__ */ jsxs11(
         "button",
         {
           type: "button",
@@ -1276,7 +1219,7 @@ var ColorPickerField = ({
           "aria-expanded": open,
           "aria-label": `Pick color for ${label}`,
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+            /* @__PURE__ */ jsx11(
               "span",
               {
                 className: "sf-color__swatch",
@@ -1284,14 +1227,14 @@ var ColorPickerField = ({
                 "aria-hidden": "true"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { className: "sf-color__hex", children: value || hex }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "sf-color__chevron", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("polyline", { points: "6 9 12 15 18 9" }) })
+            /* @__PURE__ */ jsx11("span", { className: "sf-color__hex", children: value || hex }),
+            /* @__PURE__ */ jsx11("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", className: "sf-color__chevron", children: /* @__PURE__ */ jsx11("polyline", { points: "6 9 12 15 18 9" }) })
           ]
         }
       ),
-      open && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sf-color__panel", role: "dialog", "aria-label": "Color picker", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sf-color__native-wrap", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+      open && /* @__PURE__ */ jsxs11("div", { className: "sf-color__panel", role: "dialog", "aria-label": "Color picker", children: [
+        /* @__PURE__ */ jsxs11("div", { className: "sf-color__native-wrap", children: [
+          /* @__PURE__ */ jsx11(
             "input",
             {
               type: "color",
@@ -1301,9 +1244,9 @@ var ColorPickerField = ({
               title: "Open full colour picker"
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { className: "sf-color__native-label", children: "Open full picker" })
+          /* @__PURE__ */ jsx11("span", { className: "sf-color__native-label", children: "Open full picker" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "sf-color__presets", children: PRESET_COLORS.map((c) => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        /* @__PURE__ */ jsx11("div", { className: "sf-color__presets", children: PRESET_COLORS.map((c) => /* @__PURE__ */ jsx11(
           "button",
           {
             type: "button",
@@ -1316,10 +1259,10 @@ var ColorPickerField = ({
           },
           c
         )) }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sf-color__inputs", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sf-color__input-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("label", { className: "sf-color__input-label", children: "Hex" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        /* @__PURE__ */ jsxs11("div", { className: "sf-color__inputs", children: [
+          /* @__PURE__ */ jsxs11("div", { className: "sf-color__input-group", children: [
+            /* @__PURE__ */ jsx11("label", { className: "sf-color__input-label", children: "Hex" }),
+            /* @__PURE__ */ jsx11(
               "input",
               {
                 type: "text",
@@ -1335,9 +1278,9 @@ var ColorPickerField = ({
               }
             )
           ] }),
-          ["r", "g", "b"].map((ch) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sf-color__input-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("label", { className: "sf-color__input-label", children: ch.toUpperCase() }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          ["r", "g", "b"].map((ch) => /* @__PURE__ */ jsxs11("div", { className: "sf-color__input-group", children: [
+            /* @__PURE__ */ jsx11("label", { className: "sf-color__input-label", children: ch.toUpperCase() }),
+            /* @__PURE__ */ jsx11(
               "input",
               {
                 type: "number",
@@ -1354,9 +1297,9 @@ var ColorPickerField = ({
               }
             )
           ] }, ch)),
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "sf-color__input-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("label", { className: "sf-color__input-label", children: "A" }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+          /* @__PURE__ */ jsxs11("div", { className: "sf-color__input-group", children: [
+            /* @__PURE__ */ jsx11("label", { className: "sf-color__input-label", children: "A" }),
+            /* @__PURE__ */ jsx11(
               "input",
               {
                 type: "number",
@@ -1372,15 +1315,15 @@ var ColorPickerField = ({
         ] })
       ] })
     ] }),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx11("p", { className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx11("p", { className: "sf-error", role: "alert", children: error })
   ] });
 };
 var ColorPickerField_default = ColorPickerField;
 
 // src/fields/OTPField.tsx
-var import_react7 = require("react");
-var import_jsx_runtime12 = require("react/jsx-runtime");
+import { useRef as useRef5, useCallback as useCallback4 } from "react";
+import { jsx as jsx12, jsxs as jsxs12 } from "react/jsx-runtime";
 var OTPField = ({
   name,
   label,
@@ -1393,7 +1336,7 @@ var OTPField = ({
   required,
   otpLength = 6
 }) => {
-  const inputsRef = (0, import_react7.useRef)([]);
+  const inputsRef = useRef5([]);
   const digits = (value || "").split("").concat(Array(otpLength).fill("")).slice(0, otpLength);
   const focusNext = (idx) => {
     var _a;
@@ -1403,7 +1346,7 @@ var OTPField = ({
     var _a;
     return (_a = inputsRef.current[idx - 1]) == null ? void 0 : _a.focus();
   };
-  const handleChange = (0, import_react7.useCallback)(
+  const handleChange = useCallback4(
     (idx, raw) => {
       const char = raw.replace(/\D/g, "").slice(-1);
       const next = [...digits];
@@ -1414,7 +1357,7 @@ var OTPField = ({
     },
     [digits, onChange]
   );
-  const handlePaste = (0, import_react7.useCallback)(
+  const handlePaste = useCallback4(
     (e, startIdx) => {
       var _a;
       e.preventDefault();
@@ -1429,7 +1372,7 @@ var OTPField = ({
     },
     [digits, onChange, otpLength]
   );
-  const handleKeyDown = (0, import_react7.useCallback)(
+  const handleKeyDown = useCallback4(
     (e, idx) => {
       if (e.key === "Backspace") {
         if (digits[idx]) {
@@ -1444,12 +1387,12 @@ var OTPField = ({
     },
     [digits, onChange]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("label", { className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs12("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs12("label", { className: "sf-label", children: [
       label,
-      required && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "sf-required", children: " *" })
+      required && /* @__PURE__ */ jsx12("span", { className: "sf-required", children: " *" })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { className: "sf-otp", role: "group", "aria-label": label, children: digits.map((d, idx) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+    /* @__PURE__ */ jsx12("div", { className: "sf-otp", role: "group", "aria-label": label, children: digits.map((d, idx) => /* @__PURE__ */ jsx12(
       "input",
       {
         ref: (el) => {
@@ -1473,15 +1416,15 @@ var OTPField = ({
       },
       idx
     )) }),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { className: "sf-help", children: helpText }),
-    error && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { className: "sf-error", role: "alert", children: error })
+    helpText && !error && /* @__PURE__ */ jsx12("p", { className: "sf-help", children: helpText }),
+    error && /* @__PURE__ */ jsx12("p", { className: "sf-error", role: "alert", children: error })
   ] });
 };
 var OTPField_default = OTPField;
 
 // src/fields/RepeatableField.tsx
-var import_react8 = require("react");
-var import_jsx_runtime13 = require("react/jsx-runtime");
+import { useCallback as useCallback5 } from "react";
+import { jsx as jsx13, jsxs as jsxs13 } from "react/jsx-runtime";
 function emptyRow(fields) {
   var _a;
   const row = {};
@@ -1506,12 +1449,12 @@ var InlineField = ({ field, value, onChange, error, disabled, rowIdx }) => {
     const opts = (field.options || []).map(
       (o) => typeof o === "string" ? { label: o, value: o } : o
     );
-    input = /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("select", __spreadProps(__spreadValues({}, baseProps), { value, onChange: (e) => onChange(e.target.value), children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("option", { value: "", children: "-- Select --" }),
-      opts.map((o) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("option", { value: o.value, children: o.label }, o.value))
+    input = /* @__PURE__ */ jsxs13("select", __spreadProps(__spreadValues({}, baseProps), { value, onChange: (e) => onChange(e.target.value), children: [
+      /* @__PURE__ */ jsx13("option", { value: "", children: "-- Select --" }),
+      opts.map((o) => /* @__PURE__ */ jsx13("option", { value: o.value, children: o.label }, o.value))
     ] }));
   } else if (field.type === "checkbox") {
-    input = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    input = /* @__PURE__ */ jsx13(
       "input",
       __spreadProps(__spreadValues({}, baseProps), {
         type: "checkbox",
@@ -1521,7 +1464,7 @@ var InlineField = ({ field, value, onChange, error, disabled, rowIdx }) => {
       })
     );
   } else if (field.type === "textarea") {
-    input = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    input = /* @__PURE__ */ jsx13(
       "textarea",
       __spreadProps(__spreadValues({}, baseProps), {
         className: `sf-input sf-textarea${error ? " sf-input--error" : ""}`,
@@ -1531,7 +1474,7 @@ var InlineField = ({ field, value, onChange, error, disabled, rowIdx }) => {
       })
     );
   } else {
-    input = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+    input = /* @__PURE__ */ jsx13(
       "input",
       __spreadProps(__spreadValues({}, baseProps), {
         type: field.type,
@@ -1540,13 +1483,13 @@ var InlineField = ({ field, value, onChange, error, disabled, rowIdx }) => {
       })
     );
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "sf-repeatable__cell", style: { gridColumn: `span ${(_b = field.col) != null ? _b : 12}` }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("label", { htmlFor: id, className: "sf-repeatable__cell-label", children: [
+  return /* @__PURE__ */ jsxs13("div", { className: "sf-repeatable__cell", style: { gridColumn: `span ${(_b = field.col) != null ? _b : 12}` }, children: [
+    /* @__PURE__ */ jsxs13("label", { htmlFor: id, className: "sf-repeatable__cell-label", children: [
       field.label,
-      ((_c = field.validation) == null ? void 0 : _c.required) && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "sf-required", children: " *" })
+      ((_c = field.validation) == null ? void 0 : _c.required) && /* @__PURE__ */ jsx13("span", { className: "sf-required", children: " *" })
     ] }),
     input,
-    error && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { className: "sf-error", children: error })
+    error && /* @__PURE__ */ jsx13("p", { className: "sf-error", children: error })
   ] });
 };
 var RepeatableField = ({
@@ -1565,11 +1508,11 @@ var RepeatableField = ({
   minRows = 0,
   maxRows = Infinity
 }) => {
-  const addRow = (0, import_react8.useCallback)(() => {
+  const addRow = useCallback5(() => {
     if (value.length >= maxRows) return;
     onChange([...value, emptyRow(fields)]);
   }, [value, fields, maxRows, onChange]);
-  const removeRow = (0, import_react8.useCallback)(
+  const removeRow = useCallback5(
     (idx) => {
       if (value.length <= minRows) return;
       const next = value.filter((_, i) => i !== idx);
@@ -1577,7 +1520,7 @@ var RepeatableField = ({
     },
     [value, minRows, onChange]
   );
-  const updateCell = (0, import_react8.useCallback)(
+  const updateCell = useCallback5(
     (rowIdx, fieldName, v) => {
       const next = value.map(
         (row, i) => i === rowIdx ? __spreadProps(__spreadValues({}, row), { [fieldName]: v }) : row
@@ -1587,13 +1530,13 @@ var RepeatableField = ({
     [value, onChange]
   );
   const rowErrors = {};
-  return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "sf-field", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "sf-repeatable__header", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("label", { className: "sf-label", children: [
+  return /* @__PURE__ */ jsxs13("div", { className: "sf-field", children: [
+    /* @__PURE__ */ jsxs13("div", { className: "sf-repeatable__header", children: [
+      /* @__PURE__ */ jsxs13("label", { className: "sf-label", children: [
         label,
-        required && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { className: "sf-required", children: " *" })
+        required && /* @__PURE__ */ jsx13("span", { className: "sf-required", children: " *" })
       ] }),
-      value.length < maxRows && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      value.length < maxRows && /* @__PURE__ */ jsx13(
         "button",
         {
           type: "button",
@@ -1604,16 +1547,16 @@ var RepeatableField = ({
         }
       )
     ] }),
-    value.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "sf-repeatable__empty", children: [
+    value.length === 0 && /* @__PURE__ */ jsxs13("div", { className: "sf-repeatable__empty", children: [
       'No rows yet. Click "',
       addLabel,
       '" to start.'
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "sf-repeatable__rows", children: value.map((row, rowIdx) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "sf-repeatable__row", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "sf-repeatable__row-index", children: rowIdx + 1 }),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "sf-repeatable__row-fields", children: fields.map((f) => {
+    /* @__PURE__ */ jsx13("div", { className: "sf-repeatable__rows", children: value.map((row, rowIdx) => /* @__PURE__ */ jsxs13("div", { className: "sf-repeatable__row", children: [
+      /* @__PURE__ */ jsx13("div", { className: "sf-repeatable__row-index", children: rowIdx + 1 }),
+      /* @__PURE__ */ jsx13("div", { className: "sf-repeatable__row-fields", children: fields.map((f) => {
         var _a;
-        return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        return /* @__PURE__ */ jsx13(
           InlineField,
           {
             field: f,
@@ -1626,7 +1569,7 @@ var RepeatableField = ({
           f.name
         );
       }) }),
-      value.length > minRows && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      value.length > minRows && /* @__PURE__ */ jsx13(
         "button",
         {
           type: "button",
@@ -1634,21 +1577,21 @@ var RepeatableField = ({
           onClick: () => removeRow(rowIdx),
           disabled,
           title: removeLabel,
-          children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "18", y1: "6", x2: "6", y2: "18" }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("line", { x1: "6", y1: "6", x2: "18", y2: "18" })
+          children: /* @__PURE__ */ jsxs13("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: [
+            /* @__PURE__ */ jsx13("line", { x1: "18", y1: "6", x2: "6", y2: "18" }),
+            /* @__PURE__ */ jsx13("line", { x1: "6", y1: "6", x2: "18", y2: "18" })
           ] })
         }
       )
     ] }, rowIdx)) }),
-    typeof error === "string" && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { className: "sf-error", role: "alert", children: error }),
-    helpText && !error && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { className: "sf-help", children: helpText })
+    typeof error === "string" && /* @__PURE__ */ jsx13("p", { className: "sf-error", role: "alert", children: error }),
+    helpText && !error && /* @__PURE__ */ jsx13("p", { className: "sf-help", children: helpText })
   ] });
 };
 var RepeatableField_default = RepeatableField;
 
 // src/SmartForm.tsx
-var import_jsx_runtime14 = require("react/jsx-runtime");
+import { jsx as jsx14, jsxs as jsxs14 } from "react/jsx-runtime";
 var SmartForm = ({
   schema = [],
   onSubmit,
@@ -1670,7 +1613,7 @@ var SmartForm = ({
     validate,
     reset
   } = useSmartForm(schema, defaultValues, onChange);
-  const handleSubmit = (0, import_react9.useCallback)(
+  const handleSubmit = useCallback6(
     (e) => __async(null, null, function* () {
       e.preventDefault();
       if (!validate()) return;
@@ -1683,7 +1626,7 @@ var SmartForm = ({
     }),
     [validate, onSubmit, values, setIsSubmitting]
   );
-  const renderField = (0, import_react9.useCallback)(
+  const renderField = useCallback6(
     (field) => {
       var _a, _b, _c, _d;
       if (field.showIf && !field.showIf(values)) return null;
@@ -1704,25 +1647,25 @@ var SmartForm = ({
       let fieldEl;
       switch (field.type) {
         case "text":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TextField_default, __spreadValues({}, commonProps));
+          fieldEl = /* @__PURE__ */ jsx14(TextField_default, __spreadValues({}, commonProps));
           break;
         case "email":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TextField_default, __spreadProps(__spreadValues({}, commonProps), { type: "email" }));
+          fieldEl = /* @__PURE__ */ jsx14(TextField_default, __spreadProps(__spreadValues({}, commonProps), { type: "email" }));
           break;
         case "password":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TextField_default, __spreadProps(__spreadValues({}, commonProps), { type: "password" }));
+          fieldEl = /* @__PURE__ */ jsx14(TextField_default, __spreadProps(__spreadValues({}, commonProps), { type: "password" }));
           break;
         case "date":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TextField_default, __spreadProps(__spreadValues({}, commonProps), { type: "date" }));
+          fieldEl = /* @__PURE__ */ jsx14(TextField_default, __spreadProps(__spreadValues({}, commonProps), { type: "date" }));
           break;
         case "number":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(NumberField_default, __spreadValues({}, commonProps));
+          fieldEl = /* @__PURE__ */ jsx14(NumberField_default, __spreadValues({}, commonProps));
           break;
         case "textarea":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TextAreaField_default, __spreadProps(__spreadValues({}, commonProps), { rows: field.rows }));
+          fieldEl = /* @__PURE__ */ jsx14(TextAreaField_default, __spreadProps(__spreadValues({}, commonProps), { rows: field.rows }));
           break;
         case "select":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          fieldEl = /* @__PURE__ */ jsx14(
             SelectField_default,
             __spreadProps(__spreadValues({}, commonProps), {
               options: field.options,
@@ -1731,14 +1674,14 @@ var SmartForm = ({
           );
           break;
         case "radio":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RadioField_default, __spreadProps(__spreadValues({}, commonProps), { options: field.options }));
+          fieldEl = /* @__PURE__ */ jsx14(RadioField_default, __spreadProps(__spreadValues({}, commonProps), { options: field.options }));
           break;
         case "checkbox":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(CheckboxField_default, __spreadValues({}, commonProps));
+          fieldEl = /* @__PURE__ */ jsx14(CheckboxField_default, __spreadValues({}, commonProps));
           break;
         // ── NEW FIELD TYPES ──────────────────────────────────────────────────
         case "daterange":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          fieldEl = /* @__PURE__ */ jsx14(
             DateRangeField_default,
             __spreadProps(__spreadValues({}, commonProps), {
               startLabel: field.startLabel,
@@ -1747,7 +1690,7 @@ var SmartForm = ({
           );
           break;
         case "file":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          fieldEl = /* @__PURE__ */ jsx14(
             FileUploadField_default,
             __spreadProps(__spreadValues({}, commonProps), {
               multiple: field.multiple,
@@ -1757,13 +1700,13 @@ var SmartForm = ({
           );
           break;
         case "signature":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(SignaturePad_default, __spreadValues({}, commonProps));
+          fieldEl = /* @__PURE__ */ jsx14(SignaturePad_default, __spreadValues({}, commonProps));
           break;
         case "rating":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(RatingField_default, __spreadProps(__spreadValues({}, commonProps), { stars: field.stars }));
+          fieldEl = /* @__PURE__ */ jsx14(RatingField_default, __spreadProps(__spreadValues({}, commonProps), { stars: field.stars }));
           break;
         case "slider":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          fieldEl = /* @__PURE__ */ jsx14(
             SliderField,
             __spreadProps(__spreadValues({}, commonProps), {
               min: field.min,
@@ -1774,13 +1717,13 @@ var SmartForm = ({
           );
           break;
         case "colorpicker":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(ColorPickerField_default, __spreadValues({}, commonProps));
+          fieldEl = /* @__PURE__ */ jsx14(ColorPickerField_default, __spreadValues({}, commonProps));
           break;
         case "otp":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(OTPField_default, __spreadProps(__spreadValues({}, commonProps), { otpLength: field.otpLength }));
+          fieldEl = /* @__PURE__ */ jsx14(OTPField_default, __spreadProps(__spreadValues({}, commonProps), { otpLength: field.otpLength }));
           break;
         case "repeatable":
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          fieldEl = /* @__PURE__ */ jsx14(
             RepeatableField_default,
             __spreadProps(__spreadValues({}, commonProps), {
               fields: (_b = field.fields) != null ? _b : [],
@@ -1792,13 +1735,13 @@ var SmartForm = ({
           );
           break;
         default:
-          fieldEl = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(TextField_default, __spreadValues({}, commonProps));
+          fieldEl = /* @__PURE__ */ jsx14(TextField_default, __spreadValues({}, commonProps));
       }
-      return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "sf-field-wrapper", style: colStyle, children: fieldEl }, field.name);
+      return /* @__PURE__ */ jsx14("div", { className: "sf-field-wrapper", style: colStyle, children: fieldEl }, field.name);
     },
     [values, errors, touched, handleChange, handleBlur]
   );
-  return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+  return /* @__PURE__ */ jsxs14(
     "form",
     {
       className: `sf-form ${className}`.trim(),
@@ -1806,9 +1749,9 @@ var SmartForm = ({
       noValidate: true,
       style: { "--sf-grid-cols": gridCols },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "sf-grid", children: schema.map(renderField) }),
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { className: "sf-actions", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        /* @__PURE__ */ jsx14("div", { className: "sf-grid", children: schema.map(renderField) }),
+        /* @__PURE__ */ jsxs14("div", { className: "sf-actions", children: [
+          /* @__PURE__ */ jsx14(
             "button",
             {
               type: "submit",
@@ -1817,7 +1760,7 @@ var SmartForm = ({
               children: isSubmitting ? "Submitting\u2026" : submitLabel
             }
           ),
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+          /* @__PURE__ */ jsx14(
             "button",
             {
               type: "button",
@@ -1835,8 +1778,8 @@ var SmartForm = ({
 var SmartForm_default = SmartForm;
 
 // src/SmartFormWizard.tsx
-var import_react10 = __toESM(require("react"));
-var import_jsx_runtime15 = require("react/jsx-runtime");
+import React8, { useState as useState7, useCallback as useCallback7 } from "react";
+import { jsx as jsx15, jsxs as jsxs15 } from "react/jsx-runtime";
 var SmartFormWizard = ({
   steps,
   onSubmit,
@@ -1846,7 +1789,7 @@ var SmartFormWizard = ({
   className = "",
   onStepChange
 }) => {
-  const [currentStep, setCurrentStep] = (0, import_react10.useState)(0);
+  const [currentStep, setCurrentStep] = useState7(0);
   const allFields = steps.reduce((acc, stepItem) => {
     acc.push(...stepItem.fields);
     return acc;
@@ -1863,11 +1806,11 @@ var SmartFormWizard = ({
   const step = steps[currentStep];
   const isFirst = currentStep === 0;
   const isLast = currentStep === steps.length - 1;
-  const validateStep = (0, import_react10.useCallback)(() => {
+  const validateStep = useCallback7(() => {
     const stepErrors = validateForm(step.fields, values);
     return Object.keys(stepErrors).length === 0;
   }, [step.fields, values]);
-  const goNext = (0, import_react10.useCallback)(() => {
+  const goNext = useCallback7(() => {
     if (!validateStep()) {
       step.fields.forEach((f) => handleBlur(f.name));
       return;
@@ -1876,12 +1819,12 @@ var SmartFormWizard = ({
     setCurrentStep(next);
     onStepChange == null ? void 0 : onStepChange(next);
   }, [validateStep, currentStep, step.fields, handleBlur, onStepChange]);
-  const goPrev = (0, import_react10.useCallback)(() => {
+  const goPrev = useCallback7(() => {
     const prev = currentStep - 1;
     setCurrentStep(prev);
     onStepChange == null ? void 0 : onStepChange(prev);
   }, [currentStep, onStepChange]);
-  const handleSubmit = (0, import_react10.useCallback)(
+  const handleSubmit = useCallback7(
     (e) => __async(null, null, function* () {
       e.preventDefault();
       if (!validateStep()) {
@@ -1898,11 +1841,11 @@ var SmartFormWizard = ({
     [validateStep, step.fields, handleBlur, onSubmit, values, setIsSubmitting]
   );
   const progress = steps.length <= 1 ? 100 : currentStep / (steps.length - 1) * 100;
-  return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: `sf-wizard ${className}`.trim(), children: [
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "sf-wizard__steps", role: "tablist", "aria-label": "Form steps", children: steps.map((s, idx) => {
+  return /* @__PURE__ */ jsxs15("div", { className: `sf-wizard ${className}`.trim(), children: [
+    /* @__PURE__ */ jsx15("div", { className: "sf-wizard__steps", role: "tablist", "aria-label": "Form steps", children: steps.map((s, idx) => {
       const state = idx < currentStep ? "done" : idx === currentStep ? "active" : "pending";
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_react10.default.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+      return /* @__PURE__ */ jsxs15(React8.Fragment, { children: [
+        /* @__PURE__ */ jsxs15(
           "div",
           {
             className: `sf-wizard__step sf-wizard__step--${state}`,
@@ -1910,18 +1853,18 @@ var SmartFormWizard = ({
             "aria-selected": idx === currentStep,
             "aria-label": `Step ${idx + 1}: ${s.title}`,
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "sf-wizard__step-circle", children: state === "done" ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "3", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("polyline", { points: "20 6 9 17 4 12" }) }) : /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { children: idx + 1 }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "sf-wizard__step-label", children: s.title })
+              /* @__PURE__ */ jsx15("div", { className: "sf-wizard__step-circle", children: state === "done" ? /* @__PURE__ */ jsx15("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "3", children: /* @__PURE__ */ jsx15("polyline", { points: "20 6 9 17 4 12" }) }) : /* @__PURE__ */ jsx15("span", { children: idx + 1 }) }),
+              /* @__PURE__ */ jsx15("span", { className: "sf-wizard__step-label", children: s.title })
             ]
           }
         ),
-        idx < steps.length - 1 && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: `sf-wizard__connector${idx < currentStep ? " sf-wizard__connector--done" : ""}` })
+        idx < steps.length - 1 && /* @__PURE__ */ jsx15("div", { className: `sf-wizard__connector${idx < currentStep ? " sf-wizard__connector--done" : ""}` })
       ] }, idx);
     }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "sf-wizard__progress-bar", role: "progressbar", "aria-valuenow": currentStep + 1, "aria-valuemin": 1, "aria-valuemax": steps.length, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "sf-wizard__progress-fill", style: { width: `${progress}%` } }) }),
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "sf-wizard__content", children: [
-      step.description && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("p", { className: "sf-wizard__description", children: step.description }),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+    /* @__PURE__ */ jsx15("div", { className: "sf-wizard__progress-bar", role: "progressbar", "aria-valuenow": currentStep + 1, "aria-valuemin": 1, "aria-valuemax": steps.length, children: /* @__PURE__ */ jsx15("div", { className: "sf-wizard__progress-fill", style: { width: `${progress}%` } }) }),
+    /* @__PURE__ */ jsxs15("div", { className: "sf-wizard__content", children: [
+      step.description && /* @__PURE__ */ jsx15("p", { className: "sf-wizard__description", children: step.description }),
+      /* @__PURE__ */ jsxs15(
         "form",
         {
           onSubmit: isLast ? handleSubmit : (e) => {
@@ -1930,11 +1873,11 @@ var SmartFormWizard = ({
           },
           noValidate: true,
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "sf-grid", style: { "--sf-grid-cols": 12 }, children: step.fields.map((field) => {
+            /* @__PURE__ */ jsx15("div", { className: "sf-grid", style: { "--sf-grid-cols": 12 }, children: step.fields.map((field) => {
               if (field.showIf && !field.showIf(values)) return null;
               const isDisabled = typeof field.disabled === "function" ? field.disabled(values) : !!field.disabled;
               const colStyle = field.col ? { gridColumn: `span ${field.col}` } : void 0;
-              return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "sf-field-wrapper", style: colStyle, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+              return /* @__PURE__ */ jsx15("div", { className: "sf-field-wrapper", style: colStyle, children: /* @__PURE__ */ jsx15(
                 FieldRenderer,
                 {
                   field,
@@ -1947,17 +1890,17 @@ var SmartFormWizard = ({
                 }
               ) }, field.name);
             }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "sf-wizard__actions", children: [
-              !isFirst && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("button", { type: "button", className: "sf-btn sf-btn--ghost", onClick: goPrev, children: "\u2190 Back" }),
-              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { flex: 1 } }),
-              !isLast && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("button", { type: "submit", className: "sf-btn sf-btn--primary", children: "Next \u2192" }),
-              isLast && /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("button", { type: "submit", className: "sf-btn sf-btn--primary", disabled: isSubmitting, children: isSubmitting ? "Submitting\u2026" : submitLabel })
+            /* @__PURE__ */ jsxs15("div", { className: "sf-wizard__actions", children: [
+              !isFirst && /* @__PURE__ */ jsx15("button", { type: "button", className: "sf-btn sf-btn--ghost", onClick: goPrev, children: "\u2190 Back" }),
+              /* @__PURE__ */ jsx15("div", { style: { flex: 1 } }),
+              !isLast && /* @__PURE__ */ jsx15("button", { type: "submit", className: "sf-btn sf-btn--primary", children: "Next \u2192" }),
+              isLast && /* @__PURE__ */ jsx15("button", { type: "submit", className: "sf-btn sf-btn--primary", disabled: isSubmitting, children: isSubmitting ? "Submitting\u2026" : submitLabel })
             ] })
           ]
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("p", { className: "sf-wizard__counter", children: [
+    /* @__PURE__ */ jsxs15("p", { className: "sf-wizard__counter", children: [
       "Step ",
       currentStep + 1,
       " of ",
@@ -1981,39 +1924,39 @@ var FieldRenderer = ({ field, value, error, onChange, onBlur, isDisabled, values
   };
   switch (field.type) {
     case "text":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TextField_default, __spreadValues({}, common));
+      return /* @__PURE__ */ jsx15(TextField_default, __spreadValues({}, common));
     case "email":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TextField_default, __spreadProps(__spreadValues({}, common), { type: "email" }));
+      return /* @__PURE__ */ jsx15(TextField_default, __spreadProps(__spreadValues({}, common), { type: "email" }));
     case "password":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TextField_default, __spreadProps(__spreadValues({}, common), { type: "password" }));
+      return /* @__PURE__ */ jsx15(TextField_default, __spreadProps(__spreadValues({}, common), { type: "password" }));
     case "date":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TextField_default, __spreadProps(__spreadValues({}, common), { type: "date" }));
+      return /* @__PURE__ */ jsx15(TextField_default, __spreadProps(__spreadValues({}, common), { type: "date" }));
     case "number":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(NumberField_default, __spreadValues({}, common));
+      return /* @__PURE__ */ jsx15(NumberField_default, __spreadValues({}, common));
     case "textarea":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TextAreaField_default, __spreadProps(__spreadValues({}, common), { rows: field.rows }));
+      return /* @__PURE__ */ jsx15(TextAreaField_default, __spreadProps(__spreadValues({}, common), { rows: field.rows }));
     case "select":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SelectField_default, __spreadProps(__spreadValues({}, common), { options: field.options, optionsUrl: field.optionsUrl }));
+      return /* @__PURE__ */ jsx15(SelectField_default, __spreadProps(__spreadValues({}, common), { options: field.options, optionsUrl: field.optionsUrl }));
     case "radio":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(RadioField_default, __spreadProps(__spreadValues({}, common), { options: field.options }));
+      return /* @__PURE__ */ jsx15(RadioField_default, __spreadProps(__spreadValues({}, common), { options: field.options }));
     case "checkbox":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(CheckboxField_default, __spreadValues({}, common));
+      return /* @__PURE__ */ jsx15(CheckboxField_default, __spreadValues({}, common));
     case "daterange":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(DateRangeField_default, __spreadProps(__spreadValues({}, common), { startLabel: field.startLabel, endLabel: field.endLabel }));
+      return /* @__PURE__ */ jsx15(DateRangeField_default, __spreadProps(__spreadValues({}, common), { startLabel: field.startLabel, endLabel: field.endLabel }));
     case "file":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(FileUploadField_default, __spreadProps(__spreadValues({}, common), { multiple: field.multiple, accept: field.accept, maxSize: field.maxSize }));
+      return /* @__PURE__ */ jsx15(FileUploadField_default, __spreadProps(__spreadValues({}, common), { multiple: field.multiple, accept: field.accept, maxSize: field.maxSize }));
     case "signature":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SignaturePad_default, __spreadValues({}, common));
+      return /* @__PURE__ */ jsx15(SignaturePad_default, __spreadValues({}, common));
     case "rating":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(RatingField_default, __spreadProps(__spreadValues({}, common), { stars: field.stars }));
+      return /* @__PURE__ */ jsx15(RatingField_default, __spreadProps(__spreadValues({}, common), { stars: field.stars }));
     case "slider":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(SliderField, __spreadProps(__spreadValues({}, common), { min: field.min, max: field.max, step: field.step, showValue: field.showValue }));
+      return /* @__PURE__ */ jsx15(SliderField, __spreadProps(__spreadValues({}, common), { min: field.min, max: field.max, step: field.step, showValue: field.showValue }));
     case "colorpicker":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(ColorPickerField_default, __spreadValues({}, common));
+      return /* @__PURE__ */ jsx15(ColorPickerField_default, __spreadValues({}, common));
     case "otp":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(OTPField_default, __spreadProps(__spreadValues({}, common), { otpLength: field.otpLength }));
+      return /* @__PURE__ */ jsx15(OTPField_default, __spreadProps(__spreadValues({}, common), { otpLength: field.otpLength }));
     case "repeatable":
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+      return /* @__PURE__ */ jsx15(
         RepeatableField_default,
         __spreadProps(__spreadValues({}, common), {
           fields: (_b = field.fields) != null ? _b : [],
@@ -2024,14 +1967,14 @@ var FieldRenderer = ({ field, value, error, onChange, onBlur, isDisabled, values
         })
       );
     default:
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(TextField_default, __spreadValues({}, common));
+      return /* @__PURE__ */ jsx15(TextField_default, __spreadValues({}, common));
   }
 };
 var SmartFormWizard_default = SmartFormWizard;
 
 // src/builder/FormBuilder.tsx
-var import_react11 = require("react");
-var import_jsx_runtime16 = require("react/jsx-runtime");
+import { useState as useState8, useCallback as useCallback8, useRef as useRef6 } from "react";
+import { Fragment, jsx as jsx16, jsxs as jsxs16 } from "react/jsx-runtime";
 var PALETTE = [
   { type: "text", icon: "T", label: "Text", defaults: {} },
   { type: "email", icon: "@", label: "Email", defaults: { validation: { email: true } } },
@@ -2060,20 +2003,20 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o;
   const update = (partial) => onChange(__spreadValues(__spreadValues({}, field), partial));
   const setValidation = (key, val) => onChange(__spreadProps(__spreadValues({}, field), { validation: __spreadProps(__spreadValues({}, field.validation), { [key]: val || void 0 }) }));
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-editor", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-editor__header", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "sfb-editor__type-badge", children: field.type }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("button", { type: "button", className: "sfb-editor__delete", onClick: onDelete, title: "Delete field", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("polyline", { points: "3 6 5 6 21 6" }),
-          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("path", { d: "M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" })
+  return /* @__PURE__ */ jsxs16("div", { className: "sfb-editor", children: [
+    /* @__PURE__ */ jsxs16("div", { className: "sfb-editor__header", children: [
+      /* @__PURE__ */ jsx16("span", { className: "sfb-editor__type-badge", children: field.type }),
+      /* @__PURE__ */ jsxs16("button", { type: "button", className: "sfb-editor__delete", onClick: onDelete, title: "Delete field", children: [
+        /* @__PURE__ */ jsxs16("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", children: [
+          /* @__PURE__ */ jsx16("polyline", { points: "3 6 5 6 21 6" }),
+          /* @__PURE__ */ jsx16("path", { d: "M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" })
         ] }),
         "Delete"
       ] })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Name (key)" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    /* @__PURE__ */ jsxs16("div", { className: "sfb-prop", children: [
+      /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Name (key)" }),
+      /* @__PURE__ */ jsx16(
         "input",
         {
           className: "sf-input sfb-prop__input",
@@ -2082,9 +2025,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Label" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    /* @__PURE__ */ jsxs16("div", { className: "sfb-prop", children: [
+      /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Label" }),
+      /* @__PURE__ */ jsx16(
         "input",
         {
           className: "sf-input sfb-prop__input",
@@ -2093,9 +2036,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Placeholder" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    /* @__PURE__ */ jsxs16("div", { className: "sfb-prop", children: [
+      /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Placeholder" }),
+      /* @__PURE__ */ jsx16(
         "input",
         {
           className: "sf-input sfb-prop__input",
@@ -2104,9 +2047,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Help text" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    /* @__PURE__ */ jsxs16("div", { className: "sfb-prop", children: [
+      /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Help text" }),
+      /* @__PURE__ */ jsx16(
         "input",
         {
           className: "sf-input sfb-prop__input",
@@ -2115,24 +2058,24 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop sfb-prop--row", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Col span" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    /* @__PURE__ */ jsxs16("div", { className: "sfb-prop sfb-prop--row", children: [
+      /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Col span" }),
+      /* @__PURE__ */ jsx16(
         "select",
         {
           className: "sf-input sfb-prop__select",
           value: (_c = field.col) != null ? _c : 12,
           onChange: (e) => update({ col: Number(e.target.value) }),
-          children: [2, 3, 4, 6, 8, 9, 12].map((c) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("option", { value: c, children: [
+          children: [2, 3, 4, 6, 8, 9, 12].map((c) => /* @__PURE__ */ jsxs16("option", { value: c, children: [
             c,
             " / 12"
           ] }, c))
         }
       )
     ] }),
-    (field.type === "select" || field.type === "radio") && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Options (comma-separated)" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    (field.type === "select" || field.type === "radio") && /* @__PURE__ */ jsxs16("div", { className: "sfb-prop", children: [
+      /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Options (comma-separated)" }),
+      /* @__PURE__ */ jsx16(
         "input",
         {
           className: "sf-input sfb-prop__input",
@@ -2141,10 +2084,10 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
         }
       )
     ] }),
-    field.type === "slider" && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(import_jsx_runtime16.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop sfb-prop--row", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Min" }),
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    field.type === "slider" && /* @__PURE__ */ jsxs16(Fragment, { children: [
+      /* @__PURE__ */ jsxs16("div", { className: "sfb-prop sfb-prop--row", children: [
+        /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Min" }),
+        /* @__PURE__ */ jsx16(
           "input",
           {
             type: "number",
@@ -2154,9 +2097,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop sfb-prop--row", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Max" }),
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      /* @__PURE__ */ jsxs16("div", { className: "sfb-prop sfb-prop--row", children: [
+        /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Max" }),
+        /* @__PURE__ */ jsx16(
           "input",
           {
             type: "number",
@@ -2166,9 +2109,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop sfb-prop--row", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Step" }),
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      /* @__PURE__ */ jsxs16("div", { className: "sfb-prop sfb-prop--row", children: [
+        /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Step" }),
+        /* @__PURE__ */ jsx16(
           "input",
           {
             type: "number",
@@ -2179,9 +2122,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
         )
       ] })
     ] }),
-    field.type === "rating" && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop sfb-prop--row", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Stars" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    field.type === "rating" && /* @__PURE__ */ jsxs16("div", { className: "sfb-prop sfb-prop--row", children: [
+      /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Stars" }),
+      /* @__PURE__ */ jsx16(
         "input",
         {
           type: "number",
@@ -2193,9 +2136,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
         }
       )
     ] }),
-    field.type === "otp" && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop sfb-prop--row", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "OTP Length" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    field.type === "otp" && /* @__PURE__ */ jsxs16("div", { className: "sfb-prop sfb-prop--row", children: [
+      /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "OTP Length" }),
+      /* @__PURE__ */ jsx16(
         "input",
         {
           type: "number",
@@ -2207,9 +2150,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
         }
       )
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-section", children: "Validation" }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-prop sfb-prop--check", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("label", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    /* @__PURE__ */ jsx16("div", { className: "sfb-section", children: "Validation" }),
+    /* @__PURE__ */ jsx16("div", { className: "sfb-prop sfb-prop--check", children: /* @__PURE__ */ jsxs16("label", { children: [
+      /* @__PURE__ */ jsx16(
         "input",
         {
           type: "checkbox",
@@ -2219,10 +2162,10 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
       ),
       "Required"
     ] }) }),
-    (field.type === "text" || field.type === "textarea" || field.type === "email" || field.type === "password") && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(import_jsx_runtime16.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop sfb-prop--row", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Min length" }),
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    (field.type === "text" || field.type === "textarea" || field.type === "email" || field.type === "password") && /* @__PURE__ */ jsxs16(Fragment, { children: [
+      /* @__PURE__ */ jsxs16("div", { className: "sfb-prop sfb-prop--row", children: [
+        /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Min length" }),
+        /* @__PURE__ */ jsx16(
           "input",
           {
             type: "number",
@@ -2232,9 +2175,9 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
           }
         )
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-prop sfb-prop--row", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("label", { className: "sfb-prop__label", children: "Max length" }),
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      /* @__PURE__ */ jsxs16("div", { className: "sfb-prop sfb-prop--row", children: [
+        /* @__PURE__ */ jsx16("label", { className: "sfb-prop__label", children: "Max length" }),
+        /* @__PURE__ */ jsx16(
           "input",
           {
             type: "number",
@@ -2248,18 +2191,18 @@ var FieldEditor = ({ field, onChange, onDelete }) => {
   ] });
 };
 var FormBuilder = ({ initialSchema = [], onChange }) => {
-  const [schema, setSchema] = (0, import_react11.useState)(initialSchema);
-  const [selected, setSelected] = (0, import_react11.useState)(null);
-  const [draggingPalette, setDraggingPalette] = (0, import_react11.useState)(null);
-  const [draggingIdx, setDraggingIdx] = (0, import_react11.useState)(null);
-  const [dragOverIdx, setDragOverIdx] = (0, import_react11.useState)(null);
-  const [tab, setTab] = (0, import_react11.useState)("builder");
-  const dragTarget = (0, import_react11.useRef)(null);
+  const [schema, setSchema] = useState8(initialSchema);
+  const [selected, setSelected] = useState8(null);
+  const [draggingPalette, setDraggingPalette] = useState8(null);
+  const [draggingIdx, setDraggingIdx] = useState8(null);
+  const [dragOverIdx, setDragOverIdx] = useState8(null);
+  const [tab, setTab] = useState8("builder");
+  const dragTarget = useRef6(null);
   const updateSchema = (next) => {
     setSchema(next);
     onChange == null ? void 0 : onChange(next);
   };
-  const addField = (0, import_react11.useCallback)(
+  const addField = useCallback8(
     (item, insertAt) => {
       const newField = __spreadValues({
         name: genName(item.type, schema),
@@ -2301,10 +2244,10 @@ var FormBuilder = ({ initialSchema = [], onChange }) => {
     setDraggingIdx(null);
     setDragOverIdx(null);
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-tabs", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("h2", { className: "sfb-title", children: "Form Builder" }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-tab-group", children: ["builder", "preview", "json"].map((t) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+  return /* @__PURE__ */ jsxs16("div", { className: "sfb", children: [
+    /* @__PURE__ */ jsxs16("div", { className: "sfb-tabs", children: [
+      /* @__PURE__ */ jsx16("h2", { className: "sfb-title", children: "Form Builder" }),
+      /* @__PURE__ */ jsx16("div", { className: "sfb-tab-group", children: ["builder", "preview", "json"].map((t) => /* @__PURE__ */ jsx16(
         "button",
         {
           type: "button",
@@ -2315,10 +2258,10 @@ var FormBuilder = ({ initialSchema = [], onChange }) => {
         t
       )) })
     ] }),
-    tab === "builder" && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-layout", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("aside", { className: "sfb-palette", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-palette__title", children: "Fields" }),
-        PALETTE.map((item) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+    tab === "builder" && /* @__PURE__ */ jsxs16("div", { className: "sfb-layout", children: [
+      /* @__PURE__ */ jsxs16("aside", { className: "sfb-palette", children: [
+        /* @__PURE__ */ jsx16("div", { className: "sfb-palette__title", children: "Fields" }),
+        PALETTE.map((item) => /* @__PURE__ */ jsxs16(
           "div",
           {
             className: "sfb-palette__item",
@@ -2328,14 +2271,14 @@ var FormBuilder = ({ initialSchema = [], onChange }) => {
             onClick: () => addField(item),
             title: `Add ${item.label}`,
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "sfb-palette__icon", children: item.icon }),
-              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { children: item.label })
+              /* @__PURE__ */ jsx16("span", { className: "sfb-palette__icon", children: item.icon }),
+              /* @__PURE__ */ jsx16("span", { children: item.label })
             ]
           },
           item.type
         ))
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+      /* @__PURE__ */ jsxs16(
         "main",
         {
           className: "sfb-canvas",
@@ -2348,13 +2291,13 @@ var FormBuilder = ({ initialSchema = [], onChange }) => {
             }
           },
           children: [
-            schema.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-canvas__empty", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-canvas__empty-icon", children: "+" }),
-              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("p", { children: "Drag fields from the left panel or click them to add" })
+            schema.length === 0 && /* @__PURE__ */ jsxs16("div", { className: "sfb-canvas__empty", children: [
+              /* @__PURE__ */ jsx16("div", { className: "sfb-canvas__empty-icon", children: "+" }),
+              /* @__PURE__ */ jsx16("p", { children: "Drag fields from the left panel or click them to add" })
             ] }),
             schema.map((field, idx) => {
               var _a, _b;
-              return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+              return /* @__PURE__ */ jsxs16(
                 "div",
                 {
                   className: `sfb-row${selected === idx ? " sfb-row--selected" : ""}${dragOverIdx === idx ? " sfb-row--dragover" : ""}`,
@@ -2374,23 +2317,23 @@ var FormBuilder = ({ initialSchema = [], onChange }) => {
                     handleDropOnRow(idx);
                   },
                   children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-row__handle", title: "Drag to reorder", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("svg", { width: "12", height: "16", viewBox: "0 0 12 16", fill: "currentColor", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("circle", { cx: "4", cy: "3", r: "1.5" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("circle", { cx: "8", cy: "3", r: "1.5" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("circle", { cx: "4", cy: "8", r: "1.5" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("circle", { cx: "8", cy: "8", r: "1.5" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("circle", { cx: "4", cy: "13", r: "1.5" }),
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("circle", { cx: "8", cy: "13", r: "1.5" })
+                    /* @__PURE__ */ jsx16("div", { className: "sfb-row__handle", title: "Drag to reorder", children: /* @__PURE__ */ jsxs16("svg", { width: "12", height: "16", viewBox: "0 0 12 16", fill: "currentColor", children: [
+                      /* @__PURE__ */ jsx16("circle", { cx: "4", cy: "3", r: "1.5" }),
+                      /* @__PURE__ */ jsx16("circle", { cx: "8", cy: "3", r: "1.5" }),
+                      /* @__PURE__ */ jsx16("circle", { cx: "4", cy: "8", r: "1.5" }),
+                      /* @__PURE__ */ jsx16("circle", { cx: "8", cy: "8", r: "1.5" }),
+                      /* @__PURE__ */ jsx16("circle", { cx: "4", cy: "13", r: "1.5" }),
+                      /* @__PURE__ */ jsx16("circle", { cx: "8", cy: "13", r: "1.5" })
                     ] }) }),
-                    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-row__content", children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "sfb-row__type", children: field.type }),
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "sfb-row__name", children: field.label }),
-                      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("span", { className: "sfb-row__key", children: [
+                    /* @__PURE__ */ jsxs16("div", { className: "sfb-row__content", children: [
+                      /* @__PURE__ */ jsx16("span", { className: "sfb-row__type", children: field.type }),
+                      /* @__PURE__ */ jsx16("span", { className: "sfb-row__name", children: field.label }),
+                      /* @__PURE__ */ jsxs16("span", { className: "sfb-row__key", children: [
                         "key: ",
                         field.name
                       ] })
                     ] }),
-                    /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-row__col", children: [
+                    /* @__PURE__ */ jsxs16("div", { className: "sfb-row__col", children: [
                       "col ",
                       (_b = field.col) != null ? _b : 12
                     ] })
@@ -2402,16 +2345,16 @@ var FormBuilder = ({ initialSchema = [], onChange }) => {
           ]
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("aside", { className: "sfb-props", children: selected !== null && schema[selected] ? /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      /* @__PURE__ */ jsx16("aside", { className: "sfb-props", children: selected !== null && schema[selected] ? /* @__PURE__ */ jsx16(
         FieldEditor,
         {
           field: schema[selected],
           onChange: (updated) => updateField(selected, updated),
           onDelete: () => deleteField(selected)
         }
-      ) : /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-props__empty", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("p", { children: "Select a field to edit its properties" }) }) })
+      ) : /* @__PURE__ */ jsx16("div", { className: "sfb-props__empty", children: /* @__PURE__ */ jsx16("p", { children: "Select a field to edit its properties" }) }) })
     ] }),
-    tab === "preview" && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-preview", children: schema.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("p", { className: "sfb-preview__empty", children: "Add fields in the Builder tab to see a preview." }) : /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    tab === "preview" && /* @__PURE__ */ jsx16("div", { className: "sfb-preview", children: schema.length === 0 ? /* @__PURE__ */ jsx16("p", { className: "sfb-preview__empty", children: "Add fields in the Builder tab to see a preview." }) : /* @__PURE__ */ jsx16(
       SmartForm_default,
       {
         schema,
@@ -2419,8 +2362,8 @@ var FormBuilder = ({ initialSchema = [], onChange }) => {
         submitLabel: "Submit (preview)"
       }
     ) }),
-    tab === "json" && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "sfb-json", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "sfb-json__toolbar", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+    tab === "json" && /* @__PURE__ */ jsxs16("div", { className: "sfb-json", children: [
+      /* @__PURE__ */ jsx16("div", { className: "sfb-json__toolbar", children: /* @__PURE__ */ jsx16(
         "button",
         {
           type: "button",
@@ -2432,18 +2375,18 @@ var FormBuilder = ({ initialSchema = [], onChange }) => {
           children: "Copy JSON"
         }
       ) }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("pre", { className: "sfb-json__code", children: JSON.stringify(schema, null, 2) })
+      /* @__PURE__ */ jsx16("pre", { className: "sfb-json__code", children: JSON.stringify(schema, null, 2) })
     ] })
   ] });
 };
 var FormBuilder_default = FormBuilder;
 
 // src/hooks/useFormState.ts
-var import_react12 = require("react");
+import { useMemo } from "react";
 function useFormState(schema, defaultValues, onChange) {
   const form = useSmartForm(schema, defaultValues, onChange);
   const { values, errors, touched, isSubmitting } = form;
-  const dirty = (0, import_react12.useMemo)(() => {
+  const dirty = useMemo(() => {
     var _a, _b;
     const d = {};
     for (const field of schema) {
@@ -2452,12 +2395,12 @@ function useFormState(schema, defaultValues, onChange) {
     }
     return d;
   }, [schema, values, defaultValues]);
-  const isDirty = (0, import_react12.useMemo)(() => Object.values(dirty).some(Boolean), [dirty]);
-  const isValid = (0, import_react12.useMemo)(
+  const isDirty = useMemo(() => Object.values(dirty).some(Boolean), [dirty]);
+  const isValid = useMemo(
     () => Object.values(errors).every((e) => !e),
     [errors]
   );
-  const completionPct = (0, import_react12.useMemo)(() => {
+  const completionPct = useMemo(() => {
     const required = schema.filter((f) => {
       var _a;
       return (_a = f.validation) == null ? void 0 : _a.required;
@@ -2562,25 +2505,24 @@ function generateStoriesFile(schema, componentName, importPath = "react-dynamic-
     content: generateStories(schema, componentName, importPath)
   };
 }
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  CheckboxField,
-  ColorPickerField,
-  DateRangeField,
+export {
+  CheckboxField_default as CheckboxField,
+  ColorPickerField_default as ColorPickerField,
+  DateRangeField_default as DateRangeField,
   FieldRenderer,
-  FileUploadField,
-  FormBuilder,
-  NumberField,
-  OTPField,
-  RadioField,
-  RatingField,
-  RepeatableField,
-  SelectField,
-  SignaturePad,
+  FileUploadField_default as FileUploadField,
+  FormBuilder_default as FormBuilder,
+  NumberField_default as NumberField,
+  OTPField_default as OTPField,
+  RadioField_default as RadioField,
+  RatingField_default as RatingField,
+  RepeatableField_default as RepeatableField,
+  SelectField_default as SelectField,
+  SignaturePad_default as SignaturePad,
   SliderField,
-  SmartForm,
-  SmartFormWizard,
-  TextField,
+  SmartForm_default as SmartForm,
+  SmartFormWizard_default as SmartFormWizard,
+  TextField_default as TextField,
   generateStories,
   generateStoriesFile,
   useFormState,
@@ -2589,4 +2531,4 @@ function generateStoriesFile(schema, componentName, importPath = "react-dynamic-
   validateField,
   validateForm,
   validateSchema
-});
+};
