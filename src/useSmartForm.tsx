@@ -2,14 +2,56 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { FieldSchema } from "./types";
 import { validateField, validateForm } from "./ValidationField";
 
-function getInitialValues(schema: FieldSchema[], defaultValues?: Record<string, any>) {
+function getInitialValues(
+  schema: FieldSchema[],
+  defaultValues?: Record<string, any>
+) {
   const values: Record<string, any> = {};
+
   for (const field of schema) {
-    values[field.name] =
-      defaultValues?.[field.name] ??
-      field.defaultValue ??
-      (field.type === "checkbox" ? false : "");
+    if (defaultValues?.[field.name] !== undefined) {
+      values[field.name] = defaultValues[field.name];
+      continue;
+    }
+
+    if (field.defaultValue !== undefined) {
+      values[field.name] = field.defaultValue;
+      continue;
+    }
+
+    switch (field.type) {
+      case "checkbox":
+        values[field.name] = false;
+        break;
+
+      case "repeatable":
+        values[field.name] = [];
+        break;
+
+      case "daterange":
+        values[field.name] = {
+          startDate: "",
+          endDate: "",
+        };
+        break;
+
+      case "file":
+        values[field.name] = null;
+        break;
+
+      case "rating":
+        values[field.name] = 0;
+        break;
+
+      case "slider":
+        values[field.name] = field.min ?? 0;
+        break;
+
+      default:
+        values[field.name] = "";
+    }
   }
+
   return values;
 }
 
